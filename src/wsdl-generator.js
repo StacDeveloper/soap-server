@@ -4,31 +4,35 @@ const toXSDTypes = (type) => {
     return XSD_TYPES.includes(type) ? `xsd:${type}` : type
 }
 
-const generateTypes = (operation, namespace) => {
+function generateTypes(operations, namespace) {
     let types = ""
-    for (const op of operation) {
-        types += `<xsd:element name="${op.name}Request">
+ 
+    for (const op of operations) {
+        // Request element
+        types += `
+        <xsd:element name="${op.name}Request">
             <xsd:complexType>
                 <xsd:sequence>
                     ${Object.entries(op.input)
-                .map(([field, type]) => `<xsd:element name="${field}" type="${toXsdType(type)}"/>`)
-                .join("\n                    ")}
+                        .map(([field, type]) => `<xsd:element name="${field}" type="${toXSDTypes(type)}"/>`)
+                        .join("\n                    ")}
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>`
-
+ 
         // Response element
         types += `
         <xsd:element name="${op.name}Response">
             <xsd:complexType>
                 <xsd:sequence>
                     ${Object.entries(op.output)
-                .map(([field, type]) => `<xsd:element name="${field}" type="${toXsdType(type)}"/>`)
-                .join("\n                    ")}
+                        .map(([field, type]) => `<xsd:element name="${field}" type="${toXSDTypes(type)}"/>`)
+                        .join("\n                    ")}
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>`
     }
+ 
     return types
 }
 
@@ -53,7 +57,7 @@ function generatePortType(operations, portTypeName) {
     </portType>`
 }
 
-function generateBinding(operation, bindingName, portTypeName) {
+function generateBinding(operations, bindingName, portTypeName) {
     const ops = operations.map(op => `
         <operation name="${op.name}">
             <soap:operation soapAction="${op.name}"/>
@@ -67,7 +71,7 @@ function generateBinding(operation, bindingName, portTypeName) {
     </binding>`
 }
 
-function generateService(servicename, portname, bindingname, address) {
+function generateService(serviceName, portName, bindingName, address) {
     return `
     <service name="${serviceName}">
         <port name="${portName}" binding="tns:${bindingName}">
@@ -76,7 +80,7 @@ function generateService(servicename, portname, bindingname, address) {
     </service>`
 }
 
-export function generateWSDL({ serviceName, namespace, port, path = "/soap", operation }) {
+export function generateWSDL({ serviceName, namespace, port, path = "/soap", operations }) {
     const portTypeName = `${serviceName}PortType`
     const bindingName = `${serviceName}Binding`
     const portName = `${serviceName}Port`

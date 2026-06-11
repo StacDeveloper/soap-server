@@ -1,5 +1,5 @@
 import http from "http"
-import { generateWSDL } from "./wsdl-generator.js"
+import { generateWSDL } from "../src/wsdl-generator.js"
 
 function extractTag(xml, tag) {
     const findTag = xml.match(new RegExp`<(?:[^:>]+:)?${tag}[^>]*>([\\s\\S]*?)<\\/(?:[^:>]+:)?${tag}>`)
@@ -49,7 +49,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
         operationMap[op.name] = {
             inputFileds: Object.keys(op.input),
             outputFields: Object.keys(op.output),
-            handler: handlers(op.name)
+            handler: handlers[op.name]
         }
     }
     const server = http.createServer((req, res) => {
@@ -60,7 +60,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
         if (req.method === "POST") {
             let body = ""
             req.on("data", (chunk) => (body += chunk))
-            req.end("end", () => {
+            req.on("end", () => {
                 const action = (req.headers["soapaction"] || "").replace(/"/g, "")
                 const op = operationMap[action]
                 if (!op) {
@@ -79,7 +79,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
                     res.end(xml)
                 } catch (error) {
                     res.writeHead(500, { "Content-Type": "text/xml; charset=utf-8" })
-                    res.end(buildSoapFault("soapenv:Server", err.message))
+                    res.end(buildSoapFault("soapenv:Server", error.message))
                 }
             })
             return
