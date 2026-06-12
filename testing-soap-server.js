@@ -25,7 +25,8 @@ createSoapServer({
             name: "AddNumbers",
             input: { a: "integer", b: "integer" },
             output: { result: "integer" }
-        }
+        },
+        
     ],
     handlers: {
         SayHello({ name }) {
@@ -39,7 +40,7 @@ createSoapServer({
         },
         AddNumbers({ a, b }) {
             return { result: Number(a) + Number(b) }
-        }
+        },
     }
 })
 

@@ -42,13 +42,13 @@ function postRequest(url, soapAction, body) {
             headers: {
                 "Content-Type": "text/xml; charset=utf-8",
                 "Content-Length": bodyBytes.length,
-                "SOAPaction": `${soapAction}`
+                "SOAPaction": `"${soapAction}"`
             }
         }
         const req = http.request(options, res => {
             let data = ""
-            res.on("data", (chunk) => body += chunk)
-            res.on("end"), () => resolve({ statusCode: res.statusCode, body: data })
+            res.on("data", (chunk) => data += chunk)
+            res.on("end", () => resolve({ statusCode: res.statusCode, body: data }))
         })
         req.on("error", reject)
         req.write(bodyBytes)

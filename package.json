@@ -1,13 +1,25 @@
 {
   "name": "soap-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Create SOAP servers and clients with plain JS — no XML writing",
+  "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node example-app/index.js",
+    "server":"node examples/example-server.js",
+    "client":"node examples/example-client.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module"
+  "keywords": [
+    "soap",
+    "xml",
+    "wsdl",
+    "server",
+    "client"
+  ],
+  "author": "Soham",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.21.0"
+  }
 }

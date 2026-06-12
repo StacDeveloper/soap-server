@@ -54,8 +54,9 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
     }
     const server = http.createServer((req, res) => {
         const url = new URL(req.url, `http://${req.headers.host}`)
-        if (req.method === "GET" && url.pathname.has("wsdl")) {
+        if (req.method === "GET" && url.searchParams.has("wsdl")) {
             res.writeHead(200, { "Content-Type": "text/xml; charset=utf-8" })
+            return res.end(wsdl)
         }
         if (req.method === "POST") {
             let body = ""
@@ -72,7 +73,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
                     return res.end(buildSoapFault("soapenv:Server", `No handler for: ${action}`))
                 }
                 try {
-                    const args = extractAllFields(body, op.inputFileds)
+                    const args = extractAllFields(body, op.inputFields)
                     const result = op.handler(args)
                     const xml = buildSoapResponse(namespace, action, result)
                     res.writeHead(200, { "Content-Type": "text/xml;charset=utf-8" })
