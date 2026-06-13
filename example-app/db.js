@@ -1,6 +1,7 @@
 import pg from "pg"
 import { config } from "./config.js"
-
+import dotenv from "dotenv"
+dotenv.config()
 const { Pool } = pg
 
 const pool = new Pool({

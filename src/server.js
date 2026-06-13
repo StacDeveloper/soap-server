@@ -2,7 +2,7 @@ import http from "http"
 import { generateWSDL } from "../src/wsdl-generator.js"
 
 function extractTag(xml, tag) {
-    const findTag = xml.match(new RegExp`<(?:[^:>]+:)?${tag}[^>]*>([\\s\\S]*?)<\\/(?:[^:>]+:)?${tag}>`)
+    const findTag = xml.match(new RegExp(`<(?:[^:>]+:)?${tag}[^>]*>([\\s\\S]*?)<\\/(?:[^:>]+:)?${tag}>`))
     return findTag ? findTag[1].trim() : null
 }
 
@@ -22,9 +22,9 @@ function buildSoapResponse(namespace, opearationName, outputFields) {
     xmlns:tns="${namespace}">
     <soapenv:Header/>
     <soapenv:Body>
-        <tns:${operationName}Response>
+        <tns:${opearationName}Response>
             ${fields}
-        </tns:${operationName}Response>
+        </tns:${opearationName}Response>
     </soapenv:Body>
 </soapenv:Envelope>`
 }
@@ -47,7 +47,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
     const operationMap = {};
     for (const op of operations) {
         operationMap[op.name] = {
-            inputFileds: Object.keys(op.input),
+            inputFields: Object.keys(op.input),
             outputFields: Object.keys(op.output),
             handler: handlers[op.name]
         }
