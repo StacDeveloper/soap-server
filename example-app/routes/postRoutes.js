@@ -20,7 +20,7 @@ export const postOperations = [
         output: { success: "string", data: "string", count: "string", message: "string" }
     },
     {
-        name: "SearchPost",
+        name: "SearchPosts",
         input: { keyword: "string" },
         output: { success: "string", count: "string", data: "string", message: "string" }
     },
@@ -41,7 +41,7 @@ export const postHandlers = {
     GetPosts: withLogger("GetPosts", (args) => post.getPosts(args)),
     GetPostById: withLogger("GetPostById", (args) => post.getPostById(args)),
     GetPostByUser: withLogger("GetPostByUser", (args) => post.getPostsByUserId(args)),
-    SearchPost: withLogger("SearchPosts", (args) => post.searchPost(args)),
+    SearchPosts: withLogger("SearchPosts", (args) => post.searchPost(args)),
     CreatePost: withLogger("CreatePost", (args) => post.createPost(args)),
     UpdatePost: withLogger("UpdatePost", (args) => post.updatePost(args)),
     DeletePost: withLogger("DeletePost", (args) => post.delete(args))

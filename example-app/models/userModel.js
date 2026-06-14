@@ -15,8 +15,8 @@ export class UserModel {
         const result = await pool.query(`SELECT id, name, email, created_at FROM users ORDER BY created_at DESC`)
         return result.rows
     }
-    static async findByEmail(id) {
-        const result = await pool.query(`SELECT id, name, email, created_at FROM users WHERE id = $1`, [id])
+    static async findByEmail(email) {
+        const result = await pool.query(`SELECT id, name, email, created_at FROM users WHERE email = $1`, [email])
         return result.rows[0] || null
     }
     static async findById(id) {
@@ -24,7 +24,7 @@ export class UserModel {
         return result.rows[0] || null
     }
     static async create({ name, email }) {
-        const result = await pool.query(`INSERT INTO users (name, email) VAULES ($1 $2) RETURNING id, name, email, created_at`, [name, email])
+        const result = await pool.query(`INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email, created_at`, [name, email])
         return result.rows[0]
     }
     static async update(id, { name, email }) {

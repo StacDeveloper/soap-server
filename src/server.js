@@ -61,7 +61,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
         if (req.method === "POST") {
             let body = ""
             req.on("data", (chunk) => (body += chunk))
-            req.on("end", () => {
+            req.on("end", async () => {
                 const action = (req.headers["soapaction"] || "").replace(/"/g, "")
                 const op = operationMap[action]
                 if (!op) {
@@ -74,7 +74,7 @@ export function createSoapServer({ serviceName, namespace, port, path = "/soap",
                 }
                 try {
                     const args = extractAllFields(body, op.inputFields)
-                    const result = op.handler(args)
+                    const result = await op.handler(args)
                     const xml = buildSoapResponse(namespace, action, result)
                     res.writeHead(200, { "Content-Type": "text/xml;charset=utf-8" })
                     res.end(xml)
