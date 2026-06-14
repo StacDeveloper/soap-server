@@ -1,12 +1,25 @@
 {
-  "name": "soap-server",
+  "name": "easy-soap-js",
   "version": "1.0.0",
   "description": "Create SOAP servers and clients with plain JS — no XML writing",
   "main": "./src/index.js",
+  "files": [
+    "src",
+    "README.MD",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url":"https://github.com/StacDeveloper/soap-server"
+  },
+  "homepage": "https://github.com/StacDeveloper/soap-server",
+  "bugs": {
+    "url":"https://github.com/StacDeveloper/soap-server/issues"
+  },
   "scripts": {
     "start": "node example-app/index.js",
-    "server":"node examples/example-server.js",
-    "client":"node examples/example-client.js"
+    "server":"node testing-soap-server.js",
+    "client":"node testing-soap-client.js"
   },
   "keywords": [
     "soap",
